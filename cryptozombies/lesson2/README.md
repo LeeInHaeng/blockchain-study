@@ -1,0 +1,18 @@
+# 배운 내용
+- 다른 contract import 방법
+- mapping 사용 (key, value 형태)
+- msg.sender를 이용해 보낸 사람 확인
+- 함수에서 여러개의 값 리턴하는 방법
+  - (,,변수1,변수2,,)
+- contract 상속하는 방법
+  - contract dog is animal
+- internal과 external
+  - internal : 상속 private
+  - external : 인터페이스, 컨트랙트 외부에서만 호출 가능
+- interface를 만드는 방법
+  - 기본적인 contract와 같지만, 함수 구조만 선언해 놓은 상태
+- require를 이용한 제한조건
+  - require 조건 불충족 시 아래 라인들 미수행
+- storage와 memory
+  - storage : 좌항, 우항 둘 다 저장하고 싶은 경우
+  - memory : 대입 후 좌항에 대한 변수 값을 변경 하여도 이전의 우항에 대해 영향이 없음

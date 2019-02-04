@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <input type="number" id="accountNumber" placeholder="0~9 account">
+    <input type="number" id="teamSelect" placeholder="1 or 2 team select">
+    <input type="number" id="voteEther" placeholder="Ether for betting">
+    <button id="betting">Betting!</button>
+    <p id="bettingCnt"></p>
+    <p id="oneTeamAmount"></p>
+    <p id="twoTeamAmount"></p>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="/javascripts/socket.io.js"></script>
+  </body>
+  <script>
+    var socket = io('http://localhost:3000');
+
+    socket.emit('index start');
+    socket.on('refreshBetting', data => {
+      $("#bettingCnt").html("현재 베팅한 플레이어 수 : " + data.bettingCnt);
+      $("#oneTeamAmount").html("1팀 베팅 금액 : " + data.oneTeamAmount + " ether");
+      $("#twoTeamAmount").html("2팀 베팅 금액 : " + data.twoTeamAmount + " ether");
+    });
+
+    socket.on('distributePrize', data => {
+      alert("승리 팀 : " + data.winnerTeam);
+      $("#bettingCnt").html("현재 베팅한 플레이어 수 : " + data.bettingCnt);
+      $("#oneTeamAmount").html("1팀 베팅 금액 : " + data.oneTeamAmount + " ether");
+      $("#twoTeamAmount").html("2팀 베팅 금액 : " + data.twoTeamAmount + " ether");
+
+      socket.emit('balance confirm');
+    });
+
+    $("#betting").click(function(){
+      var accountNumber = $("#accountNumber").val();
+      var selectedTeam = $("#teamSelect").val();
+      var sendEther = $("#voteEther").val();
+
+      if(selectedTeam=='' || sendEther==''){
+        alert("값을 입력해 주세요.");
+      }
+      else if(selectedTeam!=1 && selectedTeam!=2){
+        alert("1 혹은 2팀으로 선택해 주세요.");
+      }
+      else{
+        var sendData = {
+          accountNumber : accountNumber,
+          selectedTeam : selectedTeam,
+          sendEther : sendEther
+        };
+
+        socket.emit('index betting', sendData);
+      }
+    });
+  </script>
+</html>
